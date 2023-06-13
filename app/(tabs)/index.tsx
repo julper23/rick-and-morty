@@ -11,36 +11,13 @@ import useCapitulos from './../../hooks/useCapitulos'
 export default function CapitulosScreen() {
 
   const [searchTerm, setSearchTerm] = useState('');
-  const {caps,info,setPage} = useCapitulos("")
-
+  const {caps,info,masCaps} = useCapitulos("")
   
-  const handleSearchInputChange = (text:string) => {
-    setSearchTerm(text);
-  };
-
-  const handleSearch = () => {
-    // Lógica de búsqueda aquí, puedes realizar una llamada a una API, procesar los datos, etc.
-    console.log('Realizando búsqueda:', searchTerm);
-  };
-
-
-  const renderVacio = () => (
-    <View >
-      <Text>No hay datos</Text>
-      <Button title='Refrescar'/>
-    </View>
-  )
-
-  const masDatos = () => {
-    console.log(info)
-    if(info.next){
-      const texto: string = info.next;
-      const numPag = parseFloat(texto.substring("https://rickandmortyapi.com/api/episode/?page=".length));
-      setPage(numPag)
-      
-    }
+  const renderFooter = () => {
+    return(!info.next&&caps.length>0?<View style={styles.footerContainer}>
+      <Text>No hay mas datos</Text>
+    </View>:<View/>)
   }
-
 
   const renderItem = ({ item }) => (
     <View style={{width:"100%",padding:10}}>
@@ -52,13 +29,15 @@ export default function CapitulosScreen() {
   return (
     <View style={styles.container}>
 
-    <FlatList
-      data={caps?caps:[]}
-      style={{width:"100%",height:"100%"}}
-      renderItem={renderItem}
-      keyExtractor={item => item.episode.toString()}
-      onEndReached={masDatos}
-    />
+      <FlatList
+        data={caps?caps:[]}
+        style={{width:"100%",height:"100%"}}
+        renderItem={renderItem}
+        keyExtractor={item => item.episode.toString()}
+        ListFooterComponent={renderFooter()}
+        onEndReachedThreshold={0.2}
+        onEndReached={masCaps}
+      />
     </View>
   );
 }
@@ -68,16 +47,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: 'gray'
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    backgroundColor:'green'
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
+  footerContainer: {
+    display:"flex",
+    flexDirection:"column",
+    justifyContent:"center",
+    alignItems:"center",
+    padding:2
+  }
 });
