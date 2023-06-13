@@ -2,8 +2,11 @@ import { StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
-
+import { useEffect } from 'react';
 export default function LocalizacionesScreen() {
+
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Localizaciones</Text>

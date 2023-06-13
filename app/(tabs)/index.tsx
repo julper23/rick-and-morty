@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
@@ -12,9 +12,10 @@ export default function CapitulosScreen() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const {caps,info,masCaps} = useCapitulos("")
-  
+
+
   const renderFooter = () => {
-    return(!info.next&&caps.length>0?<View style={styles.footerContainer}>
+    return(!info.next&&caps?.length>0?<View style={styles.footerContainer}>
       <Text>No hay mas datos</Text>
     </View>:<View/>)
   }
