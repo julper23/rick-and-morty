@@ -3,7 +3,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import { useColorScheme, Button } from 'react-native';
 import { Text, View } from '../components/Themed';
 export {
   // Catch any errors thrown by the Layout component.
@@ -50,7 +50,15 @@ function RootLayoutNav() {
     <>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ title:'Rick and Morty',headerShown:false}} />
+          <Stack.Screen name="(tabs)" options={{ title:'Rick and Morty',headerShown:true,
+          headerRight: () => (
+            <Button
+              onPress={() => console.log(1)}
+              title="Update count"
+            />
+          )
+        
+        }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
         </Stack>
       </ThemeProvider>

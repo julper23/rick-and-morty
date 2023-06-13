@@ -1,45 +1,19 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs } from 'expo-router';
 import { Pressable, useColorScheme } from 'react-native';
 import { Text, View } from '../../components/Themed';
 import Colors from '../../constants/Colors';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+const Tab = createMaterialTopTabNavigator();
+import CapitulosScreen from './index'
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-      }}>
-      <Tabs.Screen
-        name="capitulos"
-        options={{
-          tabBarLabel:'',
-          tabBarIcon: ({ }) => <Text>Capítulos</Text>,
-          title:'Rick and Morty',
-          tabBarActiveBackgroundColor:'rgba(200,200,200,0.1)'
-        }}
-      />
-      <Tabs.Screen
-        name="locations"
-        options={{
-          tabBarLabel:'',
-          tabBarIcon: ({ }) => <Text>Localizaciones</Text>,
-          title:'Rick and Morty',
-          tabBarActiveBackgroundColor:'rgba(200,200,200,0.1)'
-        }}
-      />
-    </Tabs>
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={CapitulosScreen} />
+      <Tab.Screen name="Home2" component={CapitulosScreen} />
+    </Tab.Navigator>
   );
 }
