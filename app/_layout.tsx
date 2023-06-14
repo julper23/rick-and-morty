@@ -2,12 +2,13 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider,useNavigation, useRoute } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
-import { useColorScheme, Button,TextInput, Alert } from 'react-native';
+import { useColorScheme, Button,TextInput, Alert,StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { SetStateAction, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import store from "./../store"
 import { useSelector, useDispatch } from 'react-redux';
+import { Feather,MaterialIcons  } from '@expo/vector-icons';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -47,7 +48,7 @@ const buscarDatos =  (nombre: string) => {
 function RootLayoutNav() {
 
   const colorScheme = useColorScheme();
-  const [buscando,setBuscando] = useState(true);
+  const [buscando,setBuscando] = useState(false);
   const [texto, setTexto] = useState('');
 
   const pagina = useSelector(state => state.pagina);
@@ -68,15 +69,22 @@ function RootLayoutNav() {
   };
   
   const buscar = () => {
-    console.log("a");
-    console.log(pagina);
-    dispatch({ type: 'UPDATE_PAGINA', payload: pagina===0?1:0 });
+    //dispatch({ type: 'UPDATE_PAGINA', payload: pagina===0?1:0 });
+    dispatch({ type: 'UPDATE_BUSQUEDA_CAP', payload: texto });
   }
 
-  
+  const cancelarBuscar = () => {
+    dispatch({ type: 'UPDATE_BUSQUEDA_CAP', payload: "" });
+    setBuscando(false)
+  }
 
-
-
+  const BotonConIcono = ({ onPress, icon }) => {
+    return (
+      <TouchableOpacity style={styles.button} onPress={onPress}>
+        {icon}
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <>
@@ -85,11 +93,11 @@ function RootLayoutNav() {
           <Stack.Screen name="(tabs)" options={{ title:'Rick and Morty',headerShown:true,
           headerTitle: () => (
             buscando?
-            <View style={{height:35,backgroundColor:"rgba(0,0,0,0)"}}>
+            <View style={{height:35,width:150,backgroundColor:"rgba(0,0,0,0)"}}>
               <TextInput
               style={{
                 flex: 1,
-                height:20,
+                height:30,
                 paddingLeft:10,
                 backgroundColor:"rgba(127.5,127.5,127.5,0.5)",
                 borderRadius:10
@@ -105,20 +113,19 @@ function RootLayoutNav() {
             </View>
             :
             <View style={{backgroundColor:"rgba(0,0,0,0)"}}>
-            <Text style={{fontWeight:"900",fontSize:20}}>Rick and Morty</Text>
+              <Text style={{fontWeight:"900",fontSize:20}}>Rick and Morty</Text>
             </View>
             
           ),
-          headerRight: () => (<>
-            <Button
-              onPress={() => buscar()}
-              title="BUSCAR"
-            />
-            <Button
-              onPress={() => setBuscando(!buscando)}
-              title="Update count"
-            />
-          </>)
+          headerRight: () => (
+            buscando?
+              <View style={{backgroundColor:"rgba(0,0,0,0)",display:"flex",flexDirection:"row"}}>
+                <BotonConIcono onPress={()=>{buscar()}} icon={<Feather name="search" size={20} color="black" />}/>
+                <BotonConIcono onPress={()=>{cancelarBuscar()}} icon={<MaterialIcons name="cancel" size={20} color="black" />}/>
+              </View>
+            :
+              <BotonConIcono onPress={()=>{setBuscando(true)}} icon={<Feather name="search" size={20} color="black" />}/>
+          )
             
         }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
@@ -127,3 +134,22 @@ function RootLayoutNav() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "rgba(127.5,127.5,127.5,0.5)",
+    borderRadius: 35,
+    alignItems: 'center',
+    margin: 10,
+    height:35,
+    width:35,
+    display:"flex",
+    justifyContent:"center",
+    alignContent:"center"
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});

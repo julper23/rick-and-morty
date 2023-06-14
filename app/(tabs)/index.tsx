@@ -4,18 +4,33 @@ import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
 import { TextInput, Button, FlatList } from 'react-native';
 import { SetStateAction, useEffect, useState } from 'react';
-import { Feather } from '@expo/vector-icons';
+import store from "./../../store";
 import useCapitulos from './../../hooks/useCapitulos'
-
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function CapitulosScreen() {
+  const nombre = useSelector(state => state.busquedaCap);
+  const dispatch = useDispatch();
 
   const [searchTerm, setSearchTerm] = useState('');
-  const {caps,info,masCaps} = useCapitulos("")
+  const {caps,info,masCaps,setName} = useCapitulos()
+
+  useEffect(()=>{
+    console.log(nombre);
+    setName(nombre)
+  },[nombre])
+
+
+
+
+
+
+
+
 
 
   const renderFooter = () => {
-    return(!info.next&&caps?.length>0?<View style={styles.footerContainer}>
+    return(!info?.next&&caps?.length>0?<View style={styles.footerContainer}>
       <Text>No hay mas datos</Text>
     </View>:<View/>)
   }

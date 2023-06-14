@@ -8,7 +8,7 @@ import CapitulosScreen from './index'
 import LocalizacionesScreen from './localizaciones'
 import { useNavigation, useRoute, useNavigationState } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import store from "./../../store";
+
 import { useSelector, useDispatch } from 'react-redux';
 
 export default function TabLayout() {
