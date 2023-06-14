@@ -1,28 +1,58 @@
 import { useEffect, useState } from "react";
 
-export default function useLocation(page:number,name:string) {
+export default function useLocation() {
 
-    const [locations,setLocations] = useState()
+    const [locs,setLocs] = useState([])
+    const [info,setInfo] = useState({next:null})
+    const [page,setPage] = useState(0)
+    const [name,setName] = useState("")
+    const ruta = "https://rickandmortyapi.com/api/location/?page="
 
-    const getLocations = () => {
+    const getLocs = () => {
         
-        `https://rickandmortyapi.com/api/location/?page=${page}${name ? "&name="+name : "" }`
-        const response = "entra"
-
-
-
-
-
-        setLocations(response)
+        fetch(ruta+`${locs.length===0?0:page}${"&name="+name}`)
+        .then(response => response.json())
+        .then(data => {
+            if(locs.length===0){
+                setPage(0)
+                setLocs(data.results)
+            }else{
+                setLocs([...locs, ...data.results])
+            }
+            setInfo(data.info)
+        })
+        .catch(error => {console.error('Error al realizar la solicitud:', error);});
     }
 
+    const getLocsNewName = () => {
+        fetch(ruta+`0&name=${name}`)
+        .then(response => response.json())
+        .then(data => {
+            setLocs(data.results)
+            setInfo(data.info)
+        })
+        .catch(error => {console.error('Error al realizar la solicitud:', error);});
+    }
 
-    useEffect(()=>{
+    const masLocs = () => {
+        if(info.next){
+            const texto: string = info.next;
+            const numPag = parseFloat(texto.substring(ruta.length));
+            fetch(ruta+`${numPag}${"&name="+name}`)
+            .then(response => response.json())
+            .then(data => {
+                setLocs([...locs, ...data.results])
+                setInfo(data.info)
+            })
+            .catch(error => {console.error('Error al realizar la solicitud:', error);});
+        }
+    }
 
-        getLocations()
+    //Si cambiamos el numero de pagina se actualizara la lista
+    useEffect(()=>{getLocs()},[page])
 
-    },[page,name])
+    //Si se cambia el nombre se actualiza la lista
+    useEffect(()=>{getLocsNewName()},[name])
 
-
-    return {locations}
+    return {locs,info,setName,masLocs}
 }

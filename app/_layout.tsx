@@ -131,7 +131,8 @@ function RootLayoutNav() {
           )
             
         }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="modalCap" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="modalLoc" options={{ presentation: 'modal' }} />
         </Stack>
       </ThemeProvider>
     </>

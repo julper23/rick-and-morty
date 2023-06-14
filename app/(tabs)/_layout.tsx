@@ -27,7 +27,7 @@ export default function TabLayout() {
 
   return (
     <Tab.Navigator >
-      <Tab.Screen name="Capítulos" component={CapitulosScreen} listeners={{
+      <Tab.Screen name="EPISODIOS" component={CapitulosScreen} listeners={{
         tabPress: handlePressCap,
         tabLongPress: handlePressCap,
         blur: handlePressLoc,
