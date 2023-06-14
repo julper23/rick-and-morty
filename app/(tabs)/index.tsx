@@ -21,14 +21,6 @@ export default function CapitulosScreen() {
   },[nombre])
 
 
-
-
-
-
-
-
-
-
   const renderFooter = () => {
     return(!info?.next&&caps?.length>0?<View style={styles.footerContainer}>
       <Text>No hay mas datos</Text>
