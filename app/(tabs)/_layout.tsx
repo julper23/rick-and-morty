@@ -18,9 +18,12 @@ export default function TabLayout() {
   const dispatch = useDispatch();
   const handlePressCap = () => {
     dispatch({ type: 'UPDATE_PAGINA', payload: 0 });
+    dispatch({ type: 'UPDATE_BUSQUEDA_CAP', payload: "" });
+    
   }
   const handlePressLoc = () => {
     dispatch({ type: 'UPDATE_PAGINA', payload: 1 });
+    
   }
 
   return (
