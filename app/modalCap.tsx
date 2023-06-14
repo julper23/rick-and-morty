@@ -6,6 +6,7 @@ import { Text, View } from '../components/Themed';
 import { useRoute, useNavigation  } from '@react-navigation/native';
 import { useEffect,useLayoutEffect, useState  } from 'react';
 import useInfoCaps from './../hooks/useInfoCaps'
+import useComentario from './../hooks/useComentario'
 import { FlatList, Pressable, TouchableOpacity,Image, TextInput  } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
@@ -16,24 +17,12 @@ export default function ModalScreen() {
   const [nombre,setNombre] = useState("")
   const [correo,setCorreo] = useState("")
   const [comentario,setComentario] = useState("")
+  
+  const [esCorreo, setEsCorreo] = useState(false);
+  const [intentoEnv,setIntentoEnv] = useState(false);
   const {infoCap,personajes}: {infoCap: any, personajes: any[]} = useInfoCaps(ruta)
+  const {crearComentario} = useComentario()
 
-  useEffect(()=>{
-    console.log(name);
-    console.log(ruta);
-    
-    
-  },[name,ruta])
-  useEffect(()=>{
-    console.log(nombre);
-    
-    
-  },[nombre])
-  useEffect(()=>{
-    console.log(infoCap);
-    console.log(personajes);
-    
-  },[infoCap,personajes])
 
   useLayoutEffect(() => {
     //Cambiamos el titulo de la pantalla
@@ -61,8 +50,26 @@ export default function ModalScreen() {
     </View>
   );
 
-  const submitForm = () => {
 
+  const validateEmail = (text) => {
+    setCorreo(text)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const valido = emailRegex.test(text);
+    setEsCorreo(valido);
+  }
+
+  const submitForm = () => {
+    if(esCorreo&&nombre.length>0&&correo.length>0&&comentario.length>0){
+      crearComentario(nombre,correo,comentario)
+      setNombre("")
+      setCorreo("")
+      setComentario("")
+      setEsCorreo(false)
+      setIntentoEnv(false)
+    }else{
+      setIntentoEnv(true)
+    }
+    
   }
 
   return (
@@ -82,19 +89,19 @@ export default function ModalScreen() {
       <Text style={styles.tituloCat}>Comentarios</Text>
       {/*POR DISEÑAR*/}
       <TextInput
-        style={styles.input}
+        style={intentoEnv?nombre.length>0?styles.input:styles.inputInvalido:styles.input}
         placeholder="Nombre"
         value={nombre}
         onChangeText={text => setNombre(text)}
       />
       <TextInput
-        style={styles.input}
+        style={intentoEnv?esCorreo?styles.input:styles.inputInvalido:styles.input}
         placeholder="Correo electronico"
         value={correo}
-        onChangeText={text => setCorreo(text)}
+        onChangeText={validateEmail}
       />
       <TextInput
-        style={styles.inputMax}
+        style={intentoEnv?comentario.length>0?styles.inputMax:styles.inputInvalidoMax:styles.inputMax}
         placeholder="Comentario (max. 500 caracteres)"
         value={comentario}
         maxLength={500}
@@ -178,6 +185,16 @@ const styles = StyleSheet.create({
     backgroundColor:"rgba(127.5,127.5,127.5,0.5)",
     borderRadius:10
   },
+  inputInvalido:{
+    height:30,
+    paddingLeft:10,
+    marginTop:20,
+    width:"90%",
+    backgroundColor:"rgba(127.5,127.5,127.5,0.5)",
+    borderRadius:10,
+    borderColor:"red",
+    borderWidth:2
+  },
   inputMax:{
     marginTop:20,
     height: 120,
@@ -188,6 +205,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderRadius:10,
     textAlignVertical: 'top'
+  },
+  inputInvalidoMax:{
+    marginTop:20,
+    height: 120,
+    width:"90%",
+    borderWidth: 1,
+    backgroundColor:"rgba(127.5,127.5,127.5,0.5)",
+    marginBottom: 12,
+    paddingHorizontal: 8,
+    borderRadius:10,
+    textAlignVertical: 'top',
+    borderColor:"red",
+    borderWidth:2
   },
   boton:{
     backgroundColor:"rgba(127.5,127.5,127.5,0.5)",

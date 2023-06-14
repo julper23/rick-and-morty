@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import store from "./../store"
 import { useSelector, useDispatch } from 'react-redux';
 import { Feather,MaterialIcons  } from '@expo/vector-icons';
+
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
