@@ -1,18 +1,14 @@
-import { ScrollView, StyleSheet } from 'react-native';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { StyleSheet, FlatList } from 'react-native';
 
-import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
-import { TextInput, Button, FlatList } from 'react-native';
-import { SetStateAction, useEffect, useState } from 'react';
-import store from "./../../store";
+
 import useCapitulos from './../../hooks/useCapitulos'
-import { useSelector, useDispatch } from 'react-redux';
 
 export default function CapitulosScreen() {
+  
   const nombre = useSelector(state => state.busquedaCap);
-  const dispatch = useDispatch();
-
-  const [searchTerm, setSearchTerm] = useState('');
   const {caps,info,masCaps,setName} = useCapitulos()
 
   useEffect(()=>{
