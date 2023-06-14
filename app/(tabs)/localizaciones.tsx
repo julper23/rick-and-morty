@@ -10,7 +10,6 @@ export default function LocalizacionesScreen() {
   const {locs,info,setName,masLocs} = useLocation()
 
   useEffect(()=>{
-    console.log(nombre);
     setName(nombre)
   },[nombre])
 

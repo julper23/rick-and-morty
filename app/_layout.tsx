@@ -1,7 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider,useNavigation, useRoute } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
+import { Animated, Easing } from 'react-native';
+import { SplashScreen, Stack  } from 'expo-router';
 import { useColorScheme, Button,TextInput, Alert,StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
 import { SetStateAction, useEffect, useState } from 'react';
@@ -9,7 +10,6 @@ import { Provider } from 'react-redux';
 import store from "./../store"
 import { useSelector, useDispatch } from 'react-redux';
 import { Feather,MaterialIcons  } from '@expo/vector-icons';
-
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -40,11 +40,6 @@ export default function RootLayout() {
   );
 }
 
-const buscarDatos =  (nombre: string) => {
-  console.log(nombre);
-  
-}
-
 function RootLayoutNav() {
 
   const colorScheme = useColorScheme();
@@ -54,19 +49,9 @@ function RootLayoutNav() {
   const pagina = useSelector(state => state.pagina);
   const dispatch = useDispatch();
 
-  useEffect(()=>{
-    setBuscando(false)
-    console.log(pagina);
-    console.log("aaaaaa");
-    
-  },[pagina])
+  useEffect(()=>{setBuscando(false)},[pagina])
 
-
-  const handleInputChange = (text: SetStateAction<string>) => {
-    setTexto(text);
-    console.log(text);
-    
-  };
+  const handleInputChange = (text: SetStateAction<string>) => {setTexto(text);};
   
   const buscar = () => {
     dispatch({ type: pagina===0?'UPDATE_BUSQUEDA_CAP':'UPDATE_BUSQUEDA_LOC', payload: texto });
