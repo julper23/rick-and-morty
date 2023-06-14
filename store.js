@@ -15,10 +15,15 @@ const state = (state = initialState, action) => {
         pagina: action.payload,
       };
     case 'UPDATE_BUSQUEDA_CAP':
-    return {
-      ...state,
-      busquedaCap: action.payload,
-    };
+      return {
+        ...state,
+        busquedaCap: action.payload,
+      };
+    case 'UPDATE_BUSQUEDA_LOC':
+      return {
+        ...state,
+        busquedaLoc: action.payload,
+      };
     default:
       return state;
   }

@@ -69,15 +69,12 @@ function RootLayoutNav() {
   };
   
   const buscar = () => {
-    console.log(pagina);
-    
-    if(pagina===0){
-      dispatch({ type: 'UPDATE_BUSQUEDA_CAP', payload: texto });
-    }
+    dispatch({ type: pagina===0?'UPDATE_BUSQUEDA_CAP':'UPDATE_BUSQUEDA_LOC', payload: texto });
   }
 
   const cancelarBuscar = () => {
     dispatch({ type: 'UPDATE_BUSQUEDA_CAP', payload: "" });
+    dispatch({ type: 'UPDATE_BUSQUEDA_LOC', payload: "" });
     setBuscando(false)
   }
 
