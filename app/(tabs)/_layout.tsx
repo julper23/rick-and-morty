@@ -16,14 +16,13 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   const navigationState = useNavigationState((state) => state);
   const dispatch = useDispatch();
+  
   const handlePressCap = () => {
     dispatch({ type: 'UPDATE_PAGINA', payload: 0 });
     dispatch({ type: 'UPDATE_BUSQUEDA_CAP', payload: "" });
-    
   }
   const handlePressLoc = () => {
     dispatch({ type: 'UPDATE_PAGINA', payload: 1 });
-    
   }
 
   return (
@@ -31,12 +30,12 @@ export default function TabLayout() {
       <Tab.Screen name="Capítulos" component={CapitulosScreen} listeners={{
         tabPress: handlePressCap,
         tabLongPress: handlePressCap,
-        blur: handlePressCap,
+        blur: handlePressLoc,
       }}/>
       <Tab.Screen name="Localizaciones" component={LocalizacionesScreen} listeners={{
         tabPress: handlePressLoc,
         tabLongPress: handlePressLoc,
-        blur: handlePressLoc,
+        blur: handlePressCap
       }}/>
     </Tab.Navigator>
   );

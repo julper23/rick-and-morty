@@ -69,8 +69,11 @@ function RootLayoutNav() {
   };
   
   const buscar = () => {
-    //dispatch({ type: 'UPDATE_PAGINA', payload: pagina===0?1:0 });
-    dispatch({ type: 'UPDATE_BUSQUEDA_CAP', payload: texto });
+    console.log(pagina);
+    
+    if(pagina===0){
+      dispatch({ type: 'UPDATE_BUSQUEDA_CAP', payload: texto });
+    }
   }
 
   const cancelarBuscar = () => {
