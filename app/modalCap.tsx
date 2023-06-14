@@ -4,16 +4,18 @@ import { Platform, StyleSheet } from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { useRoute, useNavigation  } from '@react-navigation/native';
-import { useEffect,useLayoutEffect  } from 'react';
+import { useEffect,useLayoutEffect, useState  } from 'react';
 import useInfoCaps from './../hooks/useInfoCaps'
-import { FlatList, Pressable, TouchableOpacity,Image  } from 'react-native';
+import { FlatList, Pressable, TouchableOpacity,Image, TextInput  } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 export default function ModalScreen() {
   const route = useRoute();
   const navigation = useNavigation();
   const { name, ruta } = route.params;
-
+  const [nombre,setNombre] = useState("")
+  const [correo,setCorreo] = useState("")
+  const [comentario,setComentario] = useState("")
   const {infoCap,personajes}: {infoCap: any, personajes: any[]} = useInfoCaps(ruta)
 
   useEffect(()=>{
@@ -22,7 +24,11 @@ export default function ModalScreen() {
     
     
   },[name,ruta])
-
+  useEffect(()=>{
+    console.log(nombre);
+    
+    
+  },[nombre])
   useEffect(()=>{
     console.log(infoCap);
     console.log(personajes);
@@ -40,6 +46,7 @@ export default function ModalScreen() {
         <Image
           style={styles.image}
           source={{ uri:url}}
+          resizeMode='cover'
         />
       </View>
     );
@@ -54,57 +61,65 @@ export default function ModalScreen() {
     </View>
   );
 
+  const submitForm = () => {
+
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>{`${infoCap.num} : ${infoCap.name}`}</Text>
       <Text style={styles.fecha}>{infoCap.date}</Text>
       <Text style={styles.tituloCat}>Personajes</Text>
-
-
-      {/*POR DISEÑAR*/}
-      
-      
-      
-      
       <FlatList
         data={personajes}
         renderItem={renderItem}
-        style={{width:"100%"}}
+        style={{width:"100%",maxHeight:200}}
         keyExtractor={(item,index) => index.toString()}
         horizontal={true}
         pagingEnabled
         showsHorizontalScrollIndicator={true}
       />
-      {/*POR CREAR*/}
-      <Text style={styles.title}>------------------------------</Text>
-    
-      <Text style={styles.title}>"Comentarios</Text>
-      <Text style={styles.title}>Formulario</Text>
-      <Text style={styles.title}>Nombre</Text>
-      <Text style={styles.title}>Correo</Text>
-      <Text style={styles.title}>Comentario (max. 500 caracteres)</Text>
-      <Text style={styles.title}>Boton enviar</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/modal.tsx" />
+      <Text style={styles.tituloCat}>Comentarios</Text>
+      {/*POR DISEÑAR*/}
+      <TextInput
+        style={styles.input}
+        placeholder="Nombre"
+        value={nombre}
+        onChangeText={text => setNombre(text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Correo electronico"
+        value={correo}
+        onChangeText={text => setCorreo(text)}
+      />
+      <TextInput
+        style={styles.inputMax}
+        placeholder="Comentario (max. 500 caracteres)"
+        value={comentario}
+        maxLength={500}
+        multiline
+        onChangeText={text => setComentario(text)}
+      />
 
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+      <TouchableOpacity style={styles.boton} onPress={submitForm}><Text style={styles.textBoton}>ENVIAR</Text></TouchableOpacity>
+
     </View>
   );
 }
 
 ModalScreen.navigationOptions = ({ route }) => {
   const { name } = route.params;
+  // Cambiar el título del header por el nombre recibido
   return {
-    title: name, // Cambiar el título del header por el nombre recibido
+    title: name, 
   };
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   titulo: {
     fontSize: 20,
@@ -123,15 +138,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     width:"100%",
     padding:5
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
   containerImg: {
     alignItems: 'center',
@@ -162,6 +168,37 @@ const styles = StyleSheet.create({
     backgroundColor:"rgb(0,0,0,0)",
     width: "100%",
     fontSize: 17,
-    marginTop: 5, // Ajusta el espaciado entre la imagen y el texto
+    marginTop: 5,
+  },
+  input: {    
+    height:30,
+    paddingLeft:10,
+    marginTop:20,
+    width:"90%",
+    backgroundColor:"rgba(127.5,127.5,127.5,0.5)",
+    borderRadius:10
+  },
+  inputMax:{
+    marginTop:20,
+    height: 120,
+    width:"90%",
+    borderWidth: 1,
+    backgroundColor:"rgba(127.5,127.5,127.5,0.5)",
+    marginBottom: 12,
+    paddingHorizontal: 8,
+    borderRadius:10,
+    textAlignVertical: 'top'
+  },
+  boton:{
+    backgroundColor:"rgba(127.5,127.5,127.5,0.5)",
+    height:30,
+    width:125,
+    borderRadius:15
+  },
+  textBoton:{
+    fontSize:20,
+    fontWeight:"bold",
+    width:"100%",
+    textAlign:"center"
   }
 });
