@@ -1,15 +1,12 @@
-import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
+import { FlatList, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { useRoute, useNavigation  } from '@react-navigation/native';
-import { useEffect,useLayoutEffect, useState  } from 'react';
+import { useLayoutEffect, useState  } from 'react';
 import useInfoCaps from './../hooks/useInfoCaps'
 import useComentario from './../hooks/useComentario'
-import { FlatList, Pressable, TouchableOpacity,Image, TextInput  } from 'react-native';
-import FastImage from 'react-native-fast-image';
-
+import { Titulo } from '../components/Titulos';
+import { RenderItem } from '../components/RenderItemModal';
 export default function ModalScreen() {
   const route = useRoute();
   const navigation = useNavigation();
@@ -17,39 +14,17 @@ export default function ModalScreen() {
   const [nombre,setNombre] = useState("")
   const [correo,setCorreo] = useState("")
   const [comentario,setComentario] = useState("")
-  
   const [esCorreo, setEsCorreo] = useState(false);
   const [intentoEnv,setIntentoEnv] = useState(false);
-  const {infoCap,personajes}: {infoCap: any, personajes: any[]} = useInfoCaps(ruta)
-  const {crearComentario} = useComentario()
 
+  const {infoCap,personajes}: {infoCap: any, personajes: any[]} = useInfoCaps(ruta)
+ 
+  const {crearComentario} = useComentario()
 
   useLayoutEffect(() => {
     //Cambiamos el titulo de la pantalla
     navigation.setOptions({title: name});
   }, [navigation, name]);
-
-  const ImagenCircular = ({ url }) => {
-    return (
-      <View style={styles.containerImg}>
-        <Image
-          style={styles.image}
-          source={{ uri:url}}
-          resizeMode='cover'
-        />
-      </View>
-    );
-  };
-
-  const renderItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      <View style={styles.imageContainer}>
-        <ImagenCircular url={item.img} />
-      </View>
-      <Text style={styles.itemText}>{item.name}</Text>
-    </View>
-  );
-
 
   const validateEmail = (text) => {
     setCorreo(text)
@@ -74,19 +49,20 @@ export default function ModalScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>{`${infoCap.num} : ${infoCap.name}`}</Text>
-      <Text style={styles.fecha}>{infoCap.date}</Text>
-      <Text style={styles.tituloCat}>Personajes</Text>
+      <Titulo type={1} texto={`${infoCap.num} : ${infoCap.name}`}/>
+      <Titulo type={2} texto={infoCap.date}/>
+      <Titulo type={3} texto={`Personajes (${personajes.length})`}/>
       <FlatList
         data={personajes}
-        renderItem={renderItem}
+        renderItem={RenderItem}
         style={{width:"100%",maxHeight:200}}
         keyExtractor={(item,index) => index.toString()}
+        ListEmptyComponent={<Text style={{paddingLeft:5}}>No hay personajes</Text>}
         horizontal={true}
         pagingEnabled
         showsHorizontalScrollIndicator={true}
       />
-      <Text style={styles.tituloCat}>Comentarios</Text>
+      <Titulo type={3} texto={"Comentarios"}/>
       {/*POR DISEÑAR*/}
       <TextInput
         style={intentoEnv?nombre.length>0?styles.input:styles.inputInvalido:styles.input}
@@ -115,83 +91,28 @@ export default function ModalScreen() {
   );
 }
 
-ModalScreen.navigationOptions = ({ route }) => {
-  const { name } = route.params;
-  // Cambiar el título del header por el nombre recibido
-  return {
-    title: name, 
-  };
-};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  titulo: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    width:"100%",
-    padding:5
-  },
-  fecha: {
-    fontSize: 15,
-    width:"100%",
-    padding:5
-  },
-  tituloCat: {
-    marginTop:5,
-    fontSize: 15,
-    fontWeight: '800',
-    width:"100%",
-    padding:5
-  },
-  containerImg: {
-    alignItems: 'center',
-    width: 80,
-    height: 80,
-    borderRadius: 50,
-    overflow: 'hidden',
-  },
-  image: {
-    width: 80,
-    height: 80,
-    resizeMode: 'cover',
-  },
-  itemContainer: {
-    padding: 5,
-    width: 125,
-    height: 150,
-    alignItems: "center",
-  },
-  imageContainer: {
-    alignItems: "center",
-    justifyContent: "flex-start",
-    backgroundColor:"rgb(0,0,0,0)",
-    height: 80,
-  },
-  itemText: {
-    textAlign: "center",
-    backgroundColor:"rgb(0,0,0,0)",
-    width: "100%",
-    fontSize: 17,
-    marginTop: 5,
-  },
   input: {    
     height:30,
     paddingLeft:10,
     marginTop:20,
     width:"90%",
-    backgroundColor:"rgba(127.5,127.5,127.5,0.5)",
-    borderRadius:10
+    borderWidth: 1,
+    backgroundColor:"white",
+    borderRadius:5
   },
   inputInvalido:{
     height:30,
     paddingLeft:10,
     marginTop:20,
     width:"90%",
-    backgroundColor:"rgba(127.5,127.5,127.5,0.5)",
-    borderRadius:10,
+    backgroundColor:"white",
+    borderRadius:5,
     borderColor:"red",
     borderWidth:2
   },
@@ -200,10 +121,10 @@ const styles = StyleSheet.create({
     height: 120,
     width:"90%",
     borderWidth: 1,
-    backgroundColor:"rgba(127.5,127.5,127.5,0.5)",
+    backgroundColor:"white",
     marginBottom: 12,
     paddingHorizontal: 8,
-    borderRadius:10,
+    borderRadius:5,
     textAlignVertical: 'top'
   },
   inputInvalidoMax:{
@@ -214,10 +135,9 @@ const styles = StyleSheet.create({
     backgroundColor:"rgba(127.5,127.5,127.5,0.5)",
     marginBottom: 12,
     paddingHorizontal: 8,
-    borderRadius:10,
+    borderRadius:5,
     textAlignVertical: 'top',
-    borderColor:"red",
-    borderWidth:2
+    borderColor:"red"
   },
   boton:{
     backgroundColor:"rgba(127.5,127.5,127.5,0.5)",

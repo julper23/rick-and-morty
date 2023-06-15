@@ -1,17 +1,26 @@
-import { StyleSheet,FlatList } from 'react-native';
+import { StyleSheet,FlatList, TouchableOpacity } from 'react-native';
 
 import { Text, View } from '../../components/Themed';
 import { useEffect } from 'react';
 import useLocation from './../../hooks/useLocation'
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 export default function LocalizacionesScreen() {
   const nombre = useSelector(state => state.busquedaLoc);
   const {locs,info,setName,masLocs} = useLocation()
-
+  const navigation = useNavigation();
   useEffect(()=>{
     setName(nombre)
   },[nombre])
+
+
+
+  const navigateToDetails = (item) => {
+    console.log(item);
+    
+    navigation.navigate('modalLoc', { name: item.name, ruta: item.url });
+  };
 
   const renderFooter = () => {
     return(!info?.next&&locs?.length>0?<View style={styles.footerContainer}>
@@ -20,11 +29,11 @@ export default function LocalizacionesScreen() {
   }
 
   const renderItem = ({ item }) => (
-    <View style={{width:"100%",padding:10}}>
+    <TouchableOpacity onPress={()=>navigateToDetails(item)} style={{width:"100%",padding:10}}>
       <Text style={{fontWeight:"100"}}>{item.type}</Text>
       <Text style={{fontWeight:"600"}}>{item.name}</Text>
       <Text style={{fontWeight:"100"}}>{item.dimension}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
  return (

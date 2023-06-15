@@ -1,18 +1,38 @@
-import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
+import { StyleSheet,FlatList } from 'react-native';
+import { useRoute, useNavigation  } from '@react-navigation/native';
 import { Text, View } from '../components/Themed';
+import { useLayoutEffect } from 'react';
+import useInfoLoc from './../hooks/useInfoLoc'
+import { Titulo } from '../components/Titulos';
+import { RenderItem } from '../components/RenderItemModal';
 
 export default function ModalScreen() {
+  const route = useRoute();
+  const navigation = useNavigation();
+  const { name, ruta } = route.params;
+
+  const {infoLoc,personajes}: {infoLoc: any, personajes: any[]} = useInfoLoc(ruta)
+
+  useLayoutEffect(() => {
+    //Cambiamos el titulo de la pantalla
+    navigation.setOptions({title: name});
+  }, [navigation, name]);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/modal.tsx" />
-
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+      <Titulo type={1} texto={infoLoc.name}/>
+      <Titulo type={2} texto={infoLoc.dimension}/>
+      <Titulo type={3} texto={`Habitantes (${personajes.length})`}/>
+      <FlatList
+        data={personajes}
+        renderItem={RenderItem}
+        style={{width:"100%",maxHeight:200}}
+        keyExtractor={(item,index) => index.toString()}
+        ListEmptyComponent={<Text style={{paddingLeft:5}}>No hay habitantes</Text>}
+        horizontal={true}
+        pagingEnabled
+        showsHorizontalScrollIndicator={true}
+      />
     </View>
   );
 }
@@ -21,15 +41,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
+    justifyContent: 'flex-start',
+  }
 });

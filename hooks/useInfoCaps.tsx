@@ -14,9 +14,6 @@ export default function useInfoCaps(url:string) {
         fetch(url)
         .then(response => response.json())
         .then(async(data) => {
-            console.log(data);
-            
-            
             setInfoCap({
                 num:data.episode,
                 name:data.name,
@@ -35,12 +32,12 @@ export default function useInfoCaps(url:string) {
                 const response = await fetch(personaje);
                 const data = await response.json();
       
-                const x = {
+                const persona = {
                   name: data.name,
                   img: data.image,
                 };
       
-                return x;
+                return persona;
               } catch (error) {
                 console.error('Error al obtener los datos del personaje:', error);
                 return null;

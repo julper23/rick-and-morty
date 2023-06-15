@@ -79,14 +79,15 @@ function RootLayoutNav() {
           <Stack.Screen name="(tabs)" options={{ title:'Rick and Morty',headerShown:true,
           headerTitle: () => (
             buscando?
-            <View style={{height:35,width:150,backgroundColor:"rgba(0,0,0,0)"}}>
+            <View style={{height:35,width:170,backgroundColor:"rgba(0,0,0,0)"}}>
               <TextInput
               style={{
                 flex: 1,
                 height:30,
                 paddingLeft:10,
-                backgroundColor:"rgba(127.5,127.5,127.5,0.5)",
-                borderRadius:10
+                borderWidth:1,
+                backgroundColor:"white",
+                borderRadius:5
 
               }}
               placeholder="Buscar..."
