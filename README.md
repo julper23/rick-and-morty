@@ -1,1 +1,1 @@
-# rick-morty
+#Aplicacion Rick y Morty

@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "rick-morty",
+    "name": "Rick and Morty",
     "slug": "rick-morty",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -16,19 +16,24 @@
       "**/*"
     ],
     "ios": {
-      "userInterfaceStyle": "light",
       "supportsTablet": true
     },
     "android": {
-      "userInterfaceStyle": "light",
+      "package": "com.julper23.appRickMorty",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/mortyIcon.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
       "bundler": "metro",
       "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a20c44ca-cbe3-4fee-ba40-8079d3f0151b"
+      }
     }
   }
 }

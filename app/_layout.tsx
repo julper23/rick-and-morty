@@ -1,8 +1,7 @@
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch, Provider } from 'react-redux';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useColorScheme,TextInput, Alert,StyleSheet, TouchableOpacity } from 'react-native';
-
+import { useColorScheme,TextInput,StyleSheet, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack  } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -93,7 +92,6 @@ function RootLayoutNav() {
               onChangeText={text => setTexto(text)}
               onSubmitEditing={(event: { nativeEvent: { text: any; }; }) => {
                 const searchTerm = event.nativeEvent.text;
-                Alert.alert('Valor de búsqueda:', searchTerm);
               }}
             />
             </View>
