@@ -27,5 +27,5 @@
 
 
 ## Para descargar la APK desde git
-  - [Descargar APK](https://github.com/julper23/rick-morty/raw/main/rickAndMorty.apk)
+  - [Descargar APK](https://github.com/julper23/rick-and-morty/raw/main/rickAndMorty.apk)
 >Si la APK no se descarga, en la raiz del proyecto esta el archivo APK, al entrar en el da la opción de instalar arriba a la derecha
