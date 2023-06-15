@@ -5,9 +5,9 @@ export function ImagenCircular(props: any) {
     return (
         <View style={styles.containerImg}>
             <Image
-            style={styles.image}
-            source={{ uri:props.url}}
-            resizeMode='cover'
+                style={styles.image}
+                source={{ uri:props.url}}
+                resizeMode='cover'
             />
         </View>
     );

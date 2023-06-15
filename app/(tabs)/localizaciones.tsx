@@ -1,31 +1,26 @@
-import { StyleSheet,FlatList, TouchableOpacity } from 'react-native';
-
-import { Text, View } from '../../components/Themed';
 import { useEffect } from 'react';
-import useLocation from './../../hooks/useLocation'
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import { StyleSheet,FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+
+import useLocation from './../../hooks/useLocation';
+
+import { Text, View } from '../../components/Themed';
 
 export default function LocalizacionesScreen() {
+
   const nombre = useSelector(state => state.busquedaLoc);
-  const {locs,info,setName,masLocs} = useLocation()
+  const {locs,info,setName,getLocs} = useLocation();
   const navigation = useNavigation();
-  useEffect(()=>{
-    setName(nombre)
-  },[nombre])
 
+  useEffect(()=>{setName(nombre)},[nombre])
 
-
-  const navigateToDetails = (item) => {
-    console.log(item);
-    
-    navigation.navigate('modalLoc', { name: item.name, ruta: item.url });
-  };
+  const navigateToDetails = (item) => {navigation.navigate('modalLoc', { name: item.name, ruta: item.url });};
 
   const renderFooter = () => {
     return(!info?.next&&locs?.length>0?<View style={styles.footerContainer}>
       <Text>No hay mas datos</Text>
-    </View>:<View/>)
+    </View>:<ActivityIndicator size="large" color="#0000ff"/>)
   }
 
   const renderItem = ({ item }) => (
@@ -38,15 +33,14 @@ export default function LocalizacionesScreen() {
 
  return (
     <View style={styles.container}>
-
       <FlatList
         data={locs?locs:[]}
         style={{width:"100%",height:"100%"}}
         renderItem={renderItem}
         keyExtractor={item => item.name.toString()}
-        ListFooterComponent={renderFooter()}
+        ListFooterComponent={renderFooter}
         onEndReachedThreshold={0.2}
-        onEndReached={masLocs}
+        onEndReached={getLocs}
       />
     </View>
   );

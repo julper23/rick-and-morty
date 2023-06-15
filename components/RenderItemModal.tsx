@@ -4,14 +4,14 @@ import { Text, View } from './Themed';
 import { ImagenCircular } from './ImagenCircular';
 
 export function RenderItem({ item }) {
-    return (
-        <View style={styles.itemContainer}>
-            <View style={styles.imageContainer}>
-                <ImagenCircular url={item.img} />
-            </View>
-            <Text style={styles.itemText}>{item.name}</Text>
-        </View>
-    );
+  return (
+    <View style={styles.itemContainer}>
+      <View style={styles.imageContainer}>
+        <ImagenCircular url={item.img} />
+      </View>
+      <Text style={styles.itemText}>{item.name}</Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

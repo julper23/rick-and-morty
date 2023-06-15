@@ -1,31 +1,26 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { StyleSheet, FlatList, Pressable, TouchableOpacity  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, FlatList, TouchableOpacity, ActivityIndicator  } from 'react-native';
+
+import useCapitulos from './../../hooks/useCapitulos';
+
 import { Text, View } from '../../components/Themed';
-import { Link, Tabs } from 'expo-router';
-import useCapitulos from './../../hooks/useCapitulos'
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+
 export default function CapitulosScreen() {
 
   const nombre = useSelector(state => state.busquedaCap);
-  const {caps,info,masCaps,setName} = useCapitulos()
+  const {caps,info,getCaps,setName} = useCapitulos();
   const navigation = useNavigation();
-  useEffect(()=>{
-    console.log(nombre);
-    setName(nombre)
-  },[nombre])
 
-  const navigateToDetails = (item) => {
-    console.log(item);
-    
-    navigation.navigate('modalCap', { name: item.name, ruta: item.url });
-  };
+  useEffect(()=>{setName(nombre)},[nombre])
+
+  const navigateToDetails = (item) => {navigation.navigate('modalCap', { name: item.name, ruta: item.url });};
 
   const renderFooter = () => {
     return(!info?.next&&caps?.length>0?<View style={styles.footerContainer}>
       <Text>No hay mas datos</Text>
-    </View>:<View/>)
+    </View>:<ActivityIndicator size="large" color="#0000ff"/>)
   }
 
   const renderItem = ({ item }) => (
@@ -35,6 +30,7 @@ export default function CapitulosScreen() {
       <Text style={{fontWeight:"100"}}>{item.air_date}</Text>
     </TouchableOpacity>
   );
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -42,9 +38,9 @@ export default function CapitulosScreen() {
         style={{width:"100%",height:"100%"}}
         renderItem={renderItem}
         keyExtractor={item => item.episode.toString()}
-        ListFooterComponent={renderFooter()}
+        ListFooterComponent={renderFooter}
         onEndReachedThreshold={0.2}
-        onEndReached={masCaps}
+        onEndReached={getCaps}
       />
     </View>
   );

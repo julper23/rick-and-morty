@@ -1,32 +1,36 @@
+import { useLayoutEffect, useState  } from 'react';
+import { useRoute, useNavigation  } from '@react-navigation/native';
 import { FlatList, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 
-import { Text, View } from '../components/Themed';
-import { useRoute, useNavigation  } from '@react-navigation/native';
-import { useLayoutEffect, useState  } from 'react';
-import useInfoCaps from './../hooks/useInfoCaps'
-import useComentario from './../hooks/useComentario'
+import useInfoCaps from './../hooks/useInfoCaps';
+import useComentario from './../hooks/useComentario';
+
 import { Titulo } from '../components/Titulos';
+import { Text, View } from '../components/Themed';
 import { RenderItem } from '../components/RenderItemModal';
+
 export default function ModalScreen() {
+
   const route = useRoute();
   const navigation = useNavigation();
   const { name, ruta } = route.params;
-  const [nombre,setNombre] = useState("")
-  const [correo,setCorreo] = useState("")
-  const [comentario,setComentario] = useState("")
+
+  const {crearComentario} = useComentario();
+  const {infoCap,personajes}: {infoCap: any, personajes: any[]} = useInfoCaps(ruta);
+
+  const [nombre,setNombre] = useState("");
+  const [correo,setCorreo] = useState("");
+  const [comentario,setComentario] = useState("");
   const [esCorreo, setEsCorreo] = useState(false);
   const [intentoEnv,setIntentoEnv] = useState(false);
 
-  const {infoCap,personajes}: {infoCap: any, personajes: any[]} = useInfoCaps(ruta)
- 
-  const {crearComentario} = useComentario()
-
   useLayoutEffect(() => {
-    //Cambiamos el titulo de la pantalla
+    //Cambiamos el titulo del header
     navigation.setOptions({title: name});
   }, [navigation, name]);
 
-  const validateEmail = (text) => {
+  //Comprobacion del email
+  const validateEmail = (text:string) => {
     setCorreo(text)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const valido = emailRegex.test(text);
@@ -34,6 +38,7 @@ export default function ModalScreen() {
   }
 
   const submitForm = () => {
+    //Si un campo esta vacio o el correo no es valido no se envia el comentario
     if(esCorreo&&nombre.length>0&&correo.length>0&&comentario.length>0){
       crearComentario(nombre,correo,comentario)
       setNombre("")
@@ -44,7 +49,6 @@ export default function ModalScreen() {
     }else{
       setIntentoEnv(true)
     }
-    
   }
 
   return (
@@ -62,8 +66,8 @@ export default function ModalScreen() {
         pagingEnabled
         showsHorizontalScrollIndicator={true}
       />
+      {/*FORMULARIO*/}
       <Titulo type={3} texto={"Comentarios"}/>
-      {/*POR DISEÑAR*/}
       <TextInput
         style={intentoEnv?nombre.length>0?styles.input:styles.inputInvalido:styles.input}
         placeholder="Nombre"
@@ -84,9 +88,7 @@ export default function ModalScreen() {
         multiline
         onChangeText={text => setComentario(text)}
       />
-
       <TouchableOpacity style={styles.boton} onPress={submitForm}><Text style={styles.textBoton}>ENVIAR</Text></TouchableOpacity>
-
     </View>
   );
 }
@@ -132,7 +134,7 @@ const styles = StyleSheet.create({
     height: 120,
     width:"90%",
     borderWidth: 1,
-    backgroundColor:"rgba(127.5,127.5,127.5,0.5)",
+    backgroundColor:"white",
     marginBottom: 12,
     paddingHorizontal: 8,
     borderRadius:5,

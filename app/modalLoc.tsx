@@ -1,20 +1,23 @@
+import { useLayoutEffect } from 'react';
 import { StyleSheet,FlatList } from 'react-native';
 import { useRoute, useNavigation  } from '@react-navigation/native';
-import { Text, View } from '../components/Themed';
-import { useLayoutEffect } from 'react';
-import useInfoLoc from './../hooks/useInfoLoc'
+
+import useInfoLoc from './../hooks/useInfoLoc';
+
 import { Titulo } from '../components/Titulos';
+import { Text, View } from '../components/Themed';
 import { RenderItem } from '../components/RenderItemModal';
 
 export default function ModalScreen() {
+
   const route = useRoute();
   const navigation = useNavigation();
   const { name, ruta } = route.params;
 
-  const {infoLoc,personajes}: {infoLoc: any, personajes: any[]} = useInfoLoc(ruta)
+  const {infoLoc,personajes}: {infoLoc: any, personajes: any[]} = useInfoLoc(ruta);
 
   useLayoutEffect(() => {
-    //Cambiamos el titulo de la pantalla
+    //Cambiamos el titulo del header
     navigation.setOptions({title: name});
   }, [navigation, name]);
 

@@ -1,23 +1,24 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider,useNavigation, useRoute } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Animated, Easing } from 'react-native';
-import { SplashScreen, Stack  } from 'expo-router';
-import { useColorScheme, Button,TextInput, Alert,StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, View } from '../components/Themed';
 import { SetStateAction, useEffect, useState } from 'react';
-import { Provider } from 'react-redux';
-import store from "./../store"
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, Provider } from 'react-redux';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { useColorScheme,TextInput, Alert,StyleSheet, TouchableOpacity } from 'react-native';
+
+import { useFonts } from 'expo-font';
+import { SplashScreen, Stack  } from 'expo-router';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Feather,MaterialIcons  } from '@expo/vector-icons';
 
+import store from "./../store"
+
+import { Text, View } from '../components/Themed';
+
 export {
-  // Catch any errors thrown by the Layout component.
+  // Captura cualquier error lanzado por el componente Layout.
   ErrorBoundary,
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
+  // Asegurar que el botón de retroceso se mantenga al recargar los modals
   initialRouteName: '(tabs)',
 };
 
@@ -27,14 +28,13 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+  // Expo router usa Error Boundaries para atrapar los errores en la navegación
   useEffect(() => {
     if (error) throw error;
   }, [error]);
 
   return (
     <Provider store={store}>
-      {/* Keep the splash screen open until the assets have loaded. In the future, we should just support async font loading with a native version of font-display. */}
       {!loaded && <SplashScreen />}
       {loaded && <RootLayoutNav />}
     </Provider>
@@ -44,19 +44,17 @@ export default function RootLayout() {
 function RootLayoutNav() {
 
   const colorScheme = useColorScheme();
-  const [buscando,setBuscando] = useState(false);
-  const [texto, setTexto] = useState('');
 
   const pagina = useSelector(state => state.pagina);
   const dispatch = useDispatch();
 
-  useEffect(()=>{setBuscando(false)},[pagina])
+  const [buscando,setBuscando] = useState(false);
+  const [texto, setTexto] = useState('');
 
-  const handleInputChange = (text: SetStateAction<string>) => {setTexto(text);};
+  useEffect(()=>{setBuscando(false)},[pagina])
   
-  const buscar = () => {
-    dispatch({ type: pagina===0?'UPDATE_BUSQUEDA_CAP':'UPDATE_BUSQUEDA_LOC', payload: texto });
-  }
+  //Depende de la pantalla se actualizara un texto u otro
+  const buscar = () => {dispatch({ type: pagina===0?'UPDATE_BUSQUEDA_CAP':'UPDATE_BUSQUEDA_LOC', payload: texto });}
 
   const cancelarBuscar = () => {
     dispatch({ type: 'UPDATE_BUSQUEDA_CAP', payload: "" });
@@ -77,6 +75,7 @@ function RootLayoutNav() {
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ title:'Rick and Morty',headerShown:true,
+          //Si se esta buscando aparecera el textInput y si no, aparecera el titulo
           headerTitle: () => (
             buscando?
             <View style={{height:35,width:170,backgroundColor:"rgba(0,0,0,0)"}}>
@@ -91,7 +90,7 @@ function RootLayoutNav() {
 
               }}
               placeholder="Buscar..."
-              onChangeText={handleInputChange}
+              onChangeText={text => setTexto(text)}
               onSubmitEditing={(event: { nativeEvent: { text: any; }; }) => {
                 const searchTerm = event.nativeEvent.text;
                 Alert.alert('Valor de búsqueda:', searchTerm);
@@ -104,10 +103,14 @@ function RootLayoutNav() {
             </View>
             
           ),
+          //Si no se esta buscando aparecera un boton que al ser pulsado permitira al usuario filtrar por nombre
+          //Si se esta buscando aparecera el boton para empezar la busqueda y el boton para detener la busqueda
           headerRight: () => (
             buscando?
               <View style={{backgroundColor:"rgba(0,0,0,0)",display:"flex",flexDirection:"row"}}>
+                {/*Boton para lanzar la busqueda por nombre*/}
                 <BotonConIcono onPress={()=>{buscar()}} icon={<Feather name="search" size={20} color="black" />}/>
+                {/*Boton para cancelar cualquier busqueda*/}
                 <BotonConIcono onPress={()=>{cancelarBuscar()}} icon={<MaterialIcons name="cancel" size={20} color="black" />}/>
               </View>
             :

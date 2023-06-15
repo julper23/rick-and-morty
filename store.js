@@ -1,11 +1,12 @@
 import { createStore } from 'redux';
 
+//Store que almacena en que pagina nos encotramos de las principales y los valores de busqueda de las mismas
+
 const initialState = {
   pagina: 0,
   busquedaCap:'',
   busquedaLoc:''
 };
-
 
 const state = (state = initialState, action) => {
   switch (action.type) {
@@ -29,7 +30,6 @@ const state = (state = initialState, action) => {
   }
 };
 
-// Crea el almacén (store) de Redux
 const store = createStore(state);
 
 export default store;

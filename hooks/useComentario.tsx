@@ -10,6 +10,7 @@ export default function useComentario() {
             coment: comentario
         }
 
+        //Endpoint falso. jsonplaceholder es una API falsa gratuita que permite realizar pruebas
         fetch('https://jsonplaceholder.typicode.com/posts', {
             method: 'POST',
             headers: {
